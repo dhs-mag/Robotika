@@ -2,6 +2,7 @@
 # from ev3dev2.motor import *
 # from ev3dev2.sensor.lego import *
 from time import sleep
+from lib.Sonar import Sonar
 #
 # # lm = LargeMotor()
 # sm = MediumMotor(OUTPUT_C)
@@ -37,20 +38,23 @@ from time import sleep
 # sm.on_for_degrees(speed=5, degrees=viewAngle/(viewSectors*2))
 from threading import Thread
 
-array = [0, 0, 0]
+# array = [0, 0, 0]
+#
+#
+# def i_run_on_background():
+#     while True:
+#         array[0] = array[0] + 1
+#         array[1] = array[1] + 2
+#         array[2] = array[2] + 3
+#         sleep(1)
+#
+#
+# t = Thread(target=i_run_on_background)
+# t.setDaemon(True)
+# t.start()
 
-
-def i_run_on_background():
-    while True:
-        array[0] = array[0] + 1
-        array[1] = array[1] + 2
-        array[2] = array[2] + 3
-        sleep(1)
-
-
-t = Thread(target=i_run_on_background)
-t.setDaemon(True)
-t.start()
+dis = Sonar()
+dis.run()
 
 while True:
-    print(array)
+    print(dis.get_distance())
