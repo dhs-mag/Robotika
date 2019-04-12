@@ -23,12 +23,14 @@
             </p>
 
         </template>
+        <div id="graph"></div>
     </div>
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import {Component, Vue} from 'vue-property-decorator';
     import {Connection} from '../../lib/Connection';
+    import * as Plotly from 'plotly.js';
 
     interface SonarI{
         serverData : ServerDataI;
@@ -69,8 +71,34 @@
             }, 500);
         }
 
+        mounted() {
+            /*var data : Plotly.BarData[] = [{
+                type: "scatterpolargl",
+                r: [50, 300, 900],
+                theta: [0, 90, 180],
+                subplot: "polar3"
+            }];
 
-        getSonarData(){
+            var layout = {
+                polar3: {
+                    domain: {
+                        x: [0.54, 1],
+                        y: [0.56, 1]
+                    },
+                    radialaxis: {
+                        type: "log",
+                        tickangle: 45
+                    },
+                    sector: [0, 180]
+                },
+                showlegend: false
+            };
+
+
+            Plotly.newPlot('graph', data, layout);*/
+        }
+
+        getSonarData() : void {
             Connection.get("/api/sonar").then((response : APIResponseI) =>{
                this.serverData = response.data;
             });
