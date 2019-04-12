@@ -3,6 +3,7 @@
 # from ev3dev2.sensor.lego import *
 from time import sleep
 from lib.Sonar import Sonar
+from lib.Server import Server
 #
 # # lm = LargeMotor()
 # sm = MediumMotor(OUTPUT_C)
@@ -54,7 +55,10 @@ from threading import Thread
 # t.start()
 
 dis = Sonar()
+server = Server(8081)
 dis.run()
+server.set_sonar(dis)
+server.run()
 
-while True:
-    print(dis.get_distance())
+#while True:
+#    print(dis.get_distance())

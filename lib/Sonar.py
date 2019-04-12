@@ -6,6 +6,8 @@ class Sonar:
 #TODO implement scanning space in front of robot
     def __init__(self):
         self.array = [0, 0, 0]
+        self.segments = 5
+        self.view_angle = 110
 
     def thread_distance_values(self):
         #TODO read angle of motor and set value in array
@@ -26,6 +28,12 @@ class Sonar:
 
     def get_distance(self):
         return self.array
+
+    def get_segments(self):
+        return self.segments
+
+    def get_view_angle(self):
+        return self.view_angle
 
     def callback_after_corner(self, callback):
         pass
