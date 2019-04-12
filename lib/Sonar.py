@@ -12,6 +12,13 @@ class Sonar:
     def thread_distance_values(self):
         #TODO read angle of motor and set value in array
         while True:
+            if self.array[0] > 80:
+                self.array[0] = 0
+            if self.array[1] > 80:
+                self.array[1] = 0
+            if self.array[2] > 80:
+                self.array[2] = 0
+
             self.array[0] = self.array[0] + 1
             self.array[1] = self.array[1] + 2
             self.array[2] = self.array[2] + 3

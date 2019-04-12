@@ -2,6 +2,7 @@ from http.server import SimpleHTTPRequestHandler
 import socketserver
 import re
 import json
+import os
 
 
 class CustomHandler(SimpleHTTPRequestHandler):
@@ -11,8 +12,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
 
             if None != self.server.sonar:
                 self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
                 json_response = {
                     'status': 'ok',
                     'sonar': {
@@ -21,12 +20,19 @@ class CustomHandler(SimpleHTTPRequestHandler):
                         'viewAngle': self.server.sonar.get_view_angle()
                     }
                 }
-                self.wfile.write(json.dumps(json_response).encode())
             else:
                 self.send_response(500)
-                self.send_header('Content-type', 'text/html')
-                self.end_headers()
-                self.wfile.write("Sonar is not loaded".encode())
+                json_response = {
+                    'status': 'failed',
+                    'message': 'Sonar is not loaded'
+                }
+
+            self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Access-Control-Allow-Headers', '*')
+            self.send_header('Access-Control-Allow-Methods', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps(json_response).encode())
 
         else:
             SimpleHTTPRequestHandler.do_GET(self)
@@ -39,13 +45,15 @@ class CustomTCPServer(socketserver.TCPServer):
 
 
 class Server:
-# TODO implement here sonar webserver preview
+
     def __init__(self, port):
         self.sonar = None
         self.port = port
         self.handler = None
 
     def run(self):
+        web_dir = os.path.join(os.path.dirname(__file__), '..\\dev\\fe\\dist')
+        os.chdir(web_dir)
         if None == self.sonar:
             print("Please set sonar first")
         else:
