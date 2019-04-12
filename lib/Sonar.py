@@ -3,7 +3,7 @@ from threading import Thread
 
 
 class Sonar:
-
+#TODO implement scanning space in front of robot
     def __init__(self):
         self.array = [0, 0, 0]
 
