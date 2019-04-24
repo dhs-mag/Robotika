@@ -98,10 +98,15 @@
             Plotly.newPlot('graph', data, layout);*/
         }
 
-        getSonarData() : void {
-            Connection.get("/api/sonar").then((response : APIResponseI) =>{
-               this.serverData = response.data;
-            });
+        async getSonarData() : Promise<void> {
+
+            try{
+                let response = await  Connection.get("/api/sonar");
+                console.log(response);
+                this.serverData = response.data;
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 </script>

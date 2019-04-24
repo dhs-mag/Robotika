@@ -1,3 +1,5 @@
+#!usr/bin/env python3
+
 from http.server import SimpleHTTPRequestHandler
 import socketserver
 import re
@@ -52,14 +54,14 @@ class Server:
         self.handler = None
 
     def run(self):
-        web_dir = os.path.join(os.path.dirname(__file__), '..\\dev\\fe\\dist')
+        web_dir = os.path.join(os.path.dirname(__file__), '../dev/fe/dist')
         os.chdir(web_dir)
         if None == self.sonar:
             print("Please set sonar first")
         else:
-            with CustomTCPServer(("", self.port), CustomHandler, self.sonar) as httpd:
-                print("serving at port", self.port)
-                httpd.serve_forever()
+            httpd = CustomTCPServer(("", self.port), CustomHandler, self.sonar)
+            print("serving at port", self.port)
+            httpd.serve_forever()
 
     def set_sonar(self, sonar):
         self.sonar = sonar
