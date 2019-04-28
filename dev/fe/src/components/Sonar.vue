@@ -1,29 +1,27 @@
 <template>
-    <div class="hello">
-        <h1>my sonar template</h1>
-
+    <div class="sonar">
 
         <template v-if="serverData.status === 'ok'">
-
-            <p>
-                <strong>Status</strong><br>
-                {{serverData.status}}
-            </p>
-            <p>
-                <strong>Segments</strong><br>
-                {{serverData.sonar.segments}}
-            </p>
-            <p>
-                <strong>Angle</strong><br>
-                {{serverData.sonar.viewAngle}}
-            </p>
-            <p>
-                <strong>Distance</strong><br>
-                {{serverData.sonar.distance}}
-            </p>
-
+            <div class="row mt-5">
+                <div class="col-4 offset-4">
+                    <div class="d-flex justify-content-between">
+                        <div
+                                v-for="(segmentDistance, it) in serverData.sonar.distance"
+                                class="segment-wrap"
+                                :style="{transform: 'rotate('+getDegrees(it)+'deg)'}"
+                        >
+                            <span :style="{bottom: getPercent(segmentDistance)}">{{segmentDistance}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </template>
-        <div id="graph"></div>
+        <template v-else>
+            <div class="text-center p-5">
+                <h2>Something went wrong:</h2>
+                <p><strong>Status:</strong> {{serverData.status}}</p>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -54,12 +52,17 @@
     @Component
     export default class Sonar extends Vue implements SonarI {
         public serverData: ServerDataI;
+        public maxDistance: number;
+
+        static MAX_DISTANCE = 100;
 
         constructor() {
             super();
 
+            this.maxDistance = Sonar.MAX_DISTANCE;
+
             this.serverData = {
-                status: 'failed',
+                status: 'not connected to server',
                 sonar: {
                     distance: [0],
                     segments: 1,
@@ -72,37 +75,25 @@
         }
 
         mounted() {
-            /*var data : Plotly.BarData[] = [{
-                type: "scatterpolargl",
-                r: [50, 300, 900],
-                theta: [0, 90, 180],
-                subplot: "polar3"
-            }];
 
-            var layout = {
-                polar3: {
-                    domain: {
-                        x: [0.54, 1],
-                        y: [0.56, 1]
-                    },
-                    radialaxis: {
-                        type: "log",
-                        tickangle: 45
-                    },
-                    sector: [0, 180]
-                },
-                showlegend: false
-            };
+        }
 
+        getDegrees(it : number) : number{
+            let {segments, viewAngle} = this.serverData.sonar;
 
-            Plotly.newPlot('graph', data, layout);*/
+            var segmentDeg = viewAngle / segments;
+
+            return ((viewAngle - segmentDeg) / -2) + (segmentDeg * it);
+        }
+
+        getPercent(val : number) : string{
+            return ((val / Sonar.MAX_DISTANCE) * 100) + '%';
         }
 
         async getSonarData() : Promise<void> {
 
             try{
                 let response = await  Connection.get("/api/sonar");
-                console.log(response);
                 this.serverData = response.data;
             } catch (e) {
                 console.log(e);
@@ -112,5 +103,23 @@
 </script>
 
 <style scoped lang="scss">
+    .segment-wrap {
+        width: 3px;
+        height: 60vh;
+        background: red;
+        display: block;
+        position: relative;
+        transform-origin: bottom center;
 
+        span {
+            position: absolute;
+            width: 120px;
+            height: 3px;
+            display: block;
+            background: green;
+            margin-left: -60px;
+            top: auto;
+            left: 1px;
+        }
+    }
 </style>
