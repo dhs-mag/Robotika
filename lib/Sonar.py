@@ -5,30 +5,27 @@ from time import sleep
 from threading import Thread
 from ev3dev2.motor import OUTPUT_C
 from ev3dev2.motor import MediumMotor
+from ev3dev2.motor import SpeedPercent
 from ev3dev2.sensor.lego import InfraredSensor
 
 
 class Sonar:
-    # TODO implement scanning space in front of robot
+
     def __init__(self):
         self.tempDistance = []
         self.actualSector = 0
-        self.speed = 5
-        self.segments = 5
+        self.speed = SpeedPercent(20)
+        self.segments = 7
         self.distanceSegments = [0] * self.segments
-        self.view_angle = 110
+        self.view_angle = 140
         self.Motor = MediumMotor(OUTPUT_C)
         self.Motor.reset()
         self.ISensor = InfraredSensor()
 
     def thread_distance_values(self):
         while True:
-            #print(self.Motor.position)  # TODO check if is this correct degrees
-
             sector = math.floor((self.Motor.position - (self.view_angle / 2)) / (self.view_angle / self.segments)) * -1
             sector = sector - 1
-            #print("Motor", self.Motor.position)
-            #print("Sector", sector)
             self.tempDistance.append(self.ISensor.value())
 
             if sector < 0:
@@ -42,7 +39,7 @@ class Sonar:
                 self.tempDistance = []
                 self.actualSector = sector
 
-            sleep(0.1)
+            sleep(0.01)
 
     def thread_motor_rotation(self):
         self.Motor.on_for_degrees(speed=self.speed, degrees=-self.view_angle / 2)
@@ -66,7 +63,3 @@ class Sonar:
 
     def get_view_angle(self):
         return self.view_angle
-
-    def callback_after_corner(self, callback):
-        pass
-        # TODO call this callback after full rotation from one side

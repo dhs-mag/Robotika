@@ -2,7 +2,7 @@
     <div class="sonar">
 
         <template v-if="serverData.status === 'ok'">
-            <div class="row mt-5">
+            <div class="row pt-5 pb-3">
                 <div class="col-4 offset-4">
                     <div class="d-flex justify-content-between">
                         <div
@@ -10,7 +10,7 @@
                                 class="segment-wrap"
                                 :style="{transform: 'rotate('+getDegrees(it)+'deg)'}"
                         >
-                            <span :style="{bottom: getPercent(segmentDistance)}">{{segmentDistance}}</span>
+                            <span :style="{bottom: getPercent(segmentDistance)}">{{Math.round(segmentDistance)/10}}cm</span>
                         </div>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
 <style scoped lang="scss">
     .segment-wrap {
         width: 3px;
-        height: 60vh;
+        height: 50vh;
         background: red;
         display: block;
         position: relative;
