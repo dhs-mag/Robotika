@@ -72,11 +72,12 @@ class Sonar:
         return self.view_angle
 
     def get_nav_array(self):
+        print('distances', self.distanceSegments)
         segment = math.floor(self.segments / 3)
         segment_two = math.floor((self.segments / 3) * 2)
         nav_array = [
-            math.fsum(self.distanceSegments[0:segment-1])/segment,
-            math.fsum(self.distanceSegments[segment:segment_two])/(segment_two-segment),
+            math.fsum(self.distanceSegments[0:segment])/segment,
+            math.fsum(self.distanceSegments[segment:segment_two+1])/(segment_two-segment),
             math.fsum(self.distanceSegments[segment_two+1:])/segment,
         ]
         print('nav_array = ', nav_array)

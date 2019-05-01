@@ -9,22 +9,22 @@ class Driving:
         self.tank_drive = MoveTank(OUTPUT_A, OUTPUT_B)
 
     def forward(self):
-        self.tank_drive.on_for_seconds(75, 75, 1)
+        self.tank_drive.on_for_seconds(20, 20, 1)
 
     def left(self):
-        self.tank_drive.on_for_seconds(75, 20, 0.5)
+        self.tank_drive.on_for_seconds(20, 5, 0.5)
 
     def left_rotate(self):
-        self.tank_drive.on_for_seconds(50, -50, 0.5)
+        self.tank_drive.on_for_seconds(10, -10, 1.0)
 
     def back(self):
-        self.tank_drive.on_for_seconds(-75, -75, 1)
+        self.tank_drive.on_for_seconds(-20, -20, 1)
 
     def right(self):
-        self.tank_drive.on_for_seconds(20, 75, 0.5)
+        self.tank_drive.on_for_seconds(5, 20, 0.5)
 
     def right_rotate(self):
-        self.tank_drive.on_for_seconds(-50, 50, 0.5)
+        self.tank_drive.on_for_seconds(-10, 10, 1.0)
 
     def back_rotate(self):
-        self.tank_drive.on_for_seconds(-50, 50, 1.5)
+        self.tank_drive.on_for_seconds(-10, 10, 2.5)

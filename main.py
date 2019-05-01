@@ -66,7 +66,8 @@ dis.run()
 
 nav.set_sonar(dis)
 nav.set_driving(motor)
-dis.set_callback(nav.run)
+nav.run()
+dis.set_callback(nav.set_running)
 
 server.set_sonar(dis)
 server.set_driving(motor)

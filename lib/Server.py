@@ -9,6 +9,9 @@ import os
 
 class CustomHandler(SimpleHTTPRequestHandler):
 
+    def log_message(self, format, *args):
+        return
+
     def do_GET(self):
         if None != re.search('/api/move', self.path):
 
