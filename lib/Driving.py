@@ -14,8 +14,17 @@ class Driving:
     def left(self):
         self.tank_drive.on_for_seconds(75, 20, 0.5)
 
+    def left_rotate(self):
+        self.tank_drive.on_for_seconds(50, -50, 0.5)
+
     def back(self):
         self.tank_drive.on_for_seconds(-75, -75, 1)
 
     def right(self):
         self.tank_drive.on_for_seconds(20, 75, 0.5)
+
+    def right_rotate(self):
+        self.tank_drive.on_for_seconds(-50, 50, 0.5)
+
+    def back_rotate(self):
+        self.tank_drive.on_for_seconds(-50, 50, 1.5)

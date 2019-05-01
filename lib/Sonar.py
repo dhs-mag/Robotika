@@ -21,6 +21,7 @@ class Sonar:
         self.Motor = MediumMotor(OUTPUT_C)
         self.Motor.reset()
         self.ISensor = InfraredSensor()
+        self.callback = None
 
     def thread_distance_values(self):
         while True:
@@ -38,6 +39,9 @@ class Sonar:
                 self.distanceSegments[self.actualSector] = math.fsum(self.tempDistance) / len(self.tempDistance)
                 self.tempDistance = []
                 self.actualSector = sector
+                if self.actualSector is 0 or self.actualSector is self.segments - 1:
+                    if self.callback is not None:
+                        self.callback()
 
             sleep(0.01)
 
@@ -55,6 +59,9 @@ class Sonar:
         t1.start()
         t2.start()
 
+    def set_callback(self, callback):
+        self.callback = callback
+
     def get_distance(self):
         return self.distanceSegments
 
@@ -63,3 +70,14 @@ class Sonar:
 
     def get_view_angle(self):
         return self.view_angle
+
+    def get_nav_array(self):
+        segment = math.floor(self.segments / 3)
+        segment_two = math.floor((self.segments / 3) * 2)
+        nav_array = [
+            math.fsum(self.distanceSegments[0:segment-1])/segment,
+            math.fsum(self.distanceSegments[segment:segment_two])/(segment_two-segment),
+            math.fsum(self.distanceSegments[segment_two+1:])/segment,
+        ]
+        print('nav_array = ', nav_array)
+        return nav_array

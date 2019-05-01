@@ -4,6 +4,7 @@
 from time import sleep
 
 from lib.Driving import Driving
+from lib.Navigator import Navigator
 from lib.Sonar import Sonar
 from lib.Server import Server
 #
@@ -59,7 +60,14 @@ from threading import Thread
 dis = Sonar()
 motor = Driving()
 server = Server(8081)
+nav = Navigator()
+
 dis.run()
+
+nav.set_sonar(dis)
+nav.set_driving(motor)
+dis.set_callback(nav.run)
+
 server.set_sonar(dis)
 server.set_driving(motor)
 server.run()
