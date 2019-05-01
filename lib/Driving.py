@@ -1,30 +1,53 @@
-from ev3dev2.motor import MoveSteering
 from ev3dev2.motor import MoveTank
-from ev3dev2.motor import SpeedPercent
 from ev3dev2.motor import OUTPUT_A, OUTPUT_B
+
 
 class Driving:
 
     def __init__(self):
         self.tank_drive = MoveTank(OUTPUT_A, OUTPUT_B)
+        self.speed = 40
+        self.status = "none"
+
+    def __del__(self):
+        self.tank_drive.off()
+
+    def stop(self):
+        if self.tank_drive.is_running:
+            self.tank_drive.off()
 
     def forward(self):
-        self.tank_drive.on_for_seconds(20, 20, 1)
+        if self.status is not "forward":
+            self.stop()
+        self.tank_drive.on(self.speed, self.speed)
+        self.status = "forward"
 
     def left(self):
-        self.tank_drive.on_for_seconds(20, 5, 0.5)
+        if self.status is not "left":
+            self.stop()
+        self.tank_drive.on(self.speed * 1.5, self.speed / 2)
+        self.status = "left"
 
     def left_rotate(self):
-        self.tank_drive.on_for_seconds(10, -10, 1.0)
+        if self.status is not "left_rotate":
+            self.stop()
+        self.tank_drive.on(self.speed, -self.speed)
+        self.status = "left_rotate"
 
     def back(self):
-        self.tank_drive.on_for_seconds(-20, -20, 1)
+        if self.status is not "back":
+            self.stop()
+        self.tank_drive.on(-self.speed, -self.speed)
+        self.status = "back"
 
     def right(self):
-        self.tank_drive.on_for_seconds(5, 20, 0.5)
+        if self.status is not "right":
+            self.stop()
+        self.tank_drive.on(self.speed / 2, self.speed * 1.5)
+        self.status = "right"
 
     def right_rotate(self):
-        self.tank_drive.on_for_seconds(-10, 10, 1.0)
-
-    def back_rotate(self):
-        self.tank_drive.on_for_seconds(-10, 10, 2.5)
+        if self.status is not "right_rotate":
+            self.stop()
+        self.tank_drive.on(-self.speed, self.speed)
+        self.status = "right_rotate"

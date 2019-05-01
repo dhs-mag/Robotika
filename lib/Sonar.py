@@ -14,7 +14,7 @@ class Sonar:
     def __init__(self):
         self.tempDistance = []
         self.actualSector = 0
-        self.speed = SpeedPercent(20)
+        self.speed = SpeedPercent(30)
         self.segments = 7
         self.distanceSegments = [0] * self.segments
         self.view_angle = 140
@@ -22,9 +22,15 @@ class Sonar:
         self.Motor.reset()
         self.ISensor = InfraredSensor()
         self.callback = None
+        self.is_running = True
+
+    def __del__(self):
+        self.is_running = False
+        self.Motor.off()
+        self.Motor.on_to_position(self.speed, 0, False, False)
 
     def thread_distance_values(self):
-        while True:
+        while self.is_running:
             sector = math.floor((self.Motor.position - (self.view_angle / 2)) / (self.view_angle / self.segments)) * -1
             sector = sector - 1
             self.tempDistance.append(self.ISensor.value())
@@ -47,7 +53,7 @@ class Sonar:
 
     def thread_motor_rotation(self):
         self.Motor.on_for_degrees(speed=self.speed, degrees=-self.view_angle / 2)
-        while True:
+        while self.is_running:
             self.Motor.on_for_degrees(speed=self.speed, degrees=self.view_angle)
             self.Motor.on_for_degrees(speed=self.speed, degrees=-self.view_angle)
 
@@ -72,7 +78,7 @@ class Sonar:
         return self.view_angle
 
     def get_nav_array(self):
-        print('distances', self.distanceSegments)
+        # print('distances', self.distanceSegments)
         segment = math.floor(self.segments / 3)
         segment_two = math.floor((self.segments / 3) * 2)
         nav_array = [
@@ -80,5 +86,5 @@ class Sonar:
             math.fsum(self.distanceSegments[segment:segment_two+1])/(segment_two-segment),
             math.fsum(self.distanceSegments[segment_two+1:])/segment,
         ]
-        print('nav_array = ', nav_array)
+        # print('nav_array = ', nav_array)
         return nav_array

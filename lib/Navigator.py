@@ -1,4 +1,3 @@
-from time import sleep
 from threading import Thread
 
 
@@ -10,6 +9,11 @@ class Navigator:
         self.threshold = 40.0
         self.thread = None
         self.isRunning = False
+        self.system_run = True
+        self.is_started = False
+
+    def __del__(self):
+        self.system_run = False
 
     def run(self):
         self.thread = Thread(target=self.start)
@@ -25,18 +29,23 @@ class Navigator:
     def set_running(self):
         self.isRunning = True
 
+    def start_nav(self):
+        print("Start running")
+        self.is_started = True
+
+    def stop_nav(self):
+        print("Stop running")
+        self.is_started = False
+        self.driving.stop()
+
     def start(self):
-        while True:
-            if self.isRunning:
+        while self.system_run:
+            if self.is_started and self.isRunning:
                 distances = self.sonar.get_nav_array()
 
                 left = distances[0] < self.threshold
                 center = distances[1] < self.threshold
                 right = distances[2] < self.threshold
-
-                # print('left = ', left)
-                # print('center = ', center)
-                # print('right = ', right)
 
                 if center:
                     if not left and not right:
@@ -54,7 +63,7 @@ class Navigator:
                         self.driving.left_rotate()
                     else:
                         print('back - rotate back')
-                        self.driving.back_rotate()
+                        self.driving.right_rotate()
                 elif left:
                     print('turning slow right')
                     self.driving.right()
