@@ -1,8 +1,14 @@
 <template>
     <div class="control text-center">
         <div class="row mx-0">
-            <div class="col-4 offset-4 px-0 border-left border-right border-top" @click="moveForward">
+             <div class="col-4 px-0 bg-success" @click="startAuto">
+                <span>👨‍✈️</span>
+            </div>
+            <div class="col-4 px-0 border-left border-right" @click="moveForward">
                 <span>👆</span>
+            </div>
+            <div class="col-4 px-0 bg-danger" @click="stopAuto">
+                <span>👷‍♀️</span>
             </div>
         </div>
         <div class="row mx-0 border-top">
@@ -62,6 +68,22 @@
                 console.log(e);
             }
         }
+
+        async startAuto(): Promise<void> {
+            try {
+                await Connection.get("/api/auto/start");
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        async stopAuto(): Promise<void> {
+            try {
+                await Connection.get("/api/auto/stop");
+            } catch (e) {
+                console.log(e);
+            }
+        }
     }
 </script>
 
@@ -75,7 +97,7 @@
             }
 
             span{
-                font-size: 6rem;
+                font-size: 5rem;
                 line-height: 20vh;
             }
         }
