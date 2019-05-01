@@ -1,30 +1,15 @@
 <template>
     <div class="sonar">
 
-        <template v-if="serverData.status === 'ok'">
+        <div v-show="serverData.status === 'ok'">
             <canvas id="chart-0"></canvas>
-            <div class="row pt-5 pb-3">
-                <div class="col-4 offset-4">
-
-
-                    <div class="d-flex justify-content-between">
-                        <div
-                                v-for="(segmentDistance, it) in serverData.sonar.distance"
-                                class="segment-wrap"
-                                :style="{transform: 'rotate('+getDegrees(it)+'deg)'}"
-                        >
-                            <span :style="{bottom: getPercent(segmentDistance)}">{{Math.round(segmentDistance)/10}}cm</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template>
-        <template v-else>
+        </div>
+        <div v-show="serverData.status !== 'ok'">
             <div class="text-center p-5">
                 <h2>Something went wrong:</h2>
                 <p><strong>Status:</strong> {{serverData.status}}</p>
             </div>
-        </template>
+        </div>
     </div>
 </template>
 
@@ -61,7 +46,7 @@
         public config: any;
 
         static MAX_DISTANCE = 100;
-        private chart: Chart;
+        private chart: any = null;
 
         constructor() {
             super();
@@ -69,8 +54,8 @@
             this.maxDistance = Sonar.MAX_DISTANCE;
 
             this.serverData = {
-                // status: 'not connected to server',
-                status: 'ok',
+                status: 'not connected to server',
+                // status: 'ok',
                 sonar: {
                     distance: [45,
                                 39.75,
@@ -92,22 +77,25 @@
                     datasets: []
                 },
                 options: {
-                startAngle: Math.PI,
-                maintainAspectRatio: true,
-                spanGaps: false,
-                elements: {
-                    line: {
-                        tension: 0.4
-                    }
-                },
-                plugins: {
-                    filler: {
-                        propagate: false
+                    animation:{
+                        duration: 1000,
+                        easing: 'easeOutQuad'
                     },
-                    'samples-filler-analyser': {
-                        target: 'chart-analyser'
-                    }
-                }
+                    startAngle: Math.PI,
+                    maintainAspectRatio: true,
+                    aspectRatio: 1.7,
+                      scale: {
+                        ticks: {
+                            min: 0,
+                            max: 10
+                        }
+                      },
+                    spanGaps: false,
+                    elements: {
+                        line: {
+                            tension: 0.4
+                        }
+                    },
             }
             };
 
@@ -127,23 +115,27 @@
 
             // chart
 
-            const context = document.getElementById("chart-0");
+            const context :any = document.getElementById("chart-0");
 
             this.chart = new Chart(context, this.config);
 
 
         }
 
-        generateDataset(totalSegments){
+        generateDataset(totalSegments: any){
 
-            let output = [];
+            let output : any = [];
 
-            for (let i = 0; i < totalSegments; i++){
+            for (let i: any = 0; i < totalSegments; i++){
+
+                let arr =  new Array((totalSegments * 2) - 1).fill(0);
+
+                arr.splice(i, 0, 0);
 
                 output.push({
                         backgroundColor: "green",
                         borderColor: "white",
-                        data: new Array((totalSegments * 2) - 1).fill(0).splice(i, 0, 0),
+                        data: arr,
                     });
             }
 
@@ -170,18 +162,18 @@
                 this.serverData = response.data;
 
                 if (this.config.data.datasets.length != this.serverData.sonar.segments){
-                    this.generateDataset(this.serverData.sonar.segments);
+                    this.config.data.datasets = this.generateDataset(this.serverData.sonar.segments);
                 }
 
-                this.config.data.datasets.forEach((piece, i) => {
+                this.config.data.datasets.forEach((piece:any, i: number) => {
 
-                    let value = this.serverData.sonar.segments[i] / 10;
+                    let value = Math.min((this.serverData.sonar.distance[i] / 10.0) * (10/8), 10);
                     let dataset = this.config.data.datasets[i];
 
                     dataset.data[i] = value;
-                    if (value < 40){
+                    if (value < 4){
                         dataset.backgroundColor = "red";
-                    } else if (value < 50) {
+                    } else if (value < 5) {
                         dataset.backgroundColor = "orange";
                     } else {
                         dataset.backgroundColor = "green";
@@ -223,7 +215,11 @@
     }
 
     #chart-0 {
-        width: 70%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        z-index: 9;
     }
 
 </style>
