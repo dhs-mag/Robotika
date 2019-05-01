@@ -1,18 +1,24 @@
 <template>
     <div class="control text-center">
         <div class="row mx-0">
-            <div class="col-4 offset-4 px-0 border-left border-right border-top" @click="moveForward">
+             <div class="col-4 px-0 bg-success" v-touch:start="startAuto" @mousedown="startAuto" @mouseup="stopAuto">
+                <span>👨‍✈️</span>
+            </div>
+            <div class="col-4 px-0 border-left border-right" v-touch:start="moveForward" @mousedown="moveForward" v-touch:end="stopAuto" @mouseup="stopAuto">
                 <span>👆</span>
+            </div>
+            <div class="col-4 px-0 bg-danger" v-touch:start="stopAuto" @mousedown="stopAuto" @mouseup="stopAuto">
+                <span>👷‍♀️</span>
             </div>
         </div>
         <div class="row mx-0 border-top">
-            <div class="col-4 px-0" @click="moveLeft">
+            <div class="col-4 px-0" v-touch:start="moveLeft" @mousedown="moveLeft" v-touch:end="stopAuto" @mouseup="stopAuto">
                 <span>👈</span>
             </div>
-            <div class="col-4 px-0 border-left border-right" @click="moveBack">
+            <div class="col-4 px-0 border-left border-right" v-touch:start="moveBack" @mousedown="moveBack" v-touch:end="stopAuto" @mouseup="stopAuto">
                 <span>👇</span>
             </div>
-            <div class="col-4 px-0" @click="moveRight">
+            <div class="col-4 px-0" v-touch:start="moveRight" @mousedown="moveRight" v-touch:end="stopAuto" @mouseup="stopAuto">
                 <span>👉</span>
             </div>
         </div>
@@ -62,6 +68,22 @@
                 console.log(e);
             }
         }
+
+        async startAuto(): Promise<void> {
+            try {
+                await Connection.get("/api/auto/start");
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        async stopAuto(): Promise<void> {
+            try {
+                await Connection.get("/api/auto/stop");
+            } catch (e) {
+                console.log(e);
+            }
+        }
     }
 </script>
 
@@ -75,7 +97,7 @@
             }
 
             span{
-                font-size: 6rem;
+                font-size: 5rem;
                 line-height: 20vh;
             }
         }

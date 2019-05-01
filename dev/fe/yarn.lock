@@ -7587,11 +7587,6 @@ planar-graph-to-polyline@^1.0.0:
     two-product "^1.0.0"
     uniq "^1.0.0"
 
-plotly.js-dist@^1.47.1:
-  version "1.47.1"
-  resolved "https://registry.yarnpkg.com/plotly.js-dist/-/plotly.js-dist-1.47.1.tgz#c773ab703928c301120db9b5627087f91ed4b035"
-  integrity sha512-8rloUis0A0qbAno5HZzAqtzuSkFJpLCW9AEamPS1MXPoGakxjdX5LiPjrQ/rOw3mDFdOGOZw2mFb8SR8nlXV1w==
-
 plotly.js@^1.47.1:
   version "1.47.1"
   resolved "https://registry.yarnpkg.com/plotly.js/-/plotly.js-1.47.1.tgz#35a7e5e70e67dd6223dbe46f2294cb5fbe256265"
@@ -10625,6 +10620,11 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
+
+vue2-touch-events@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/vue2-touch-events/-/vue2-touch-events-2.0.0.tgz#1a6b3df368756c21abcdbd02ffcfd6a1efe4df3d"
+  integrity sha512-t4LyihIieUif96RDMgRllrt/1qRE8Zu0dZoyqOAqAttx/TWynIshBQ8TumCj1xhog5EDaIgsihuVA6hPnssCLQ==
 
 vue@^2.6.6:
   version "2.6.10"
