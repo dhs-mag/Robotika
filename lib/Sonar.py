@@ -17,6 +17,7 @@ class Sonar:
         self.speed = SpeedPercent(30)
         self.segments = 7
         self.distanceSegments = [0] * self.segments
+        # self.distanceSegmentsOld = [0] * self.segments
         self.view_angle = 140
         self.Motor = MediumMotor(OUTPUT_C)
         self.Motor.reset()
@@ -42,6 +43,22 @@ class Sonar:
                 sector = self.segments - 1
 
             if sector != self.actualSector:
+
+                # keep
+                # nMinus2 = self.distanceSegmentsOld[self.actualSector]
+                # nMinus1 = self.distanceSegments[self.actualSector]
+                #
+                # nRaw = mean(self.tempDistance)
+                #
+                # inertia = math.fabs(nMinus1 - nRaw) / 100
+                #
+                # n = mean([nMinus2, nMinus1, nRaw * inertia]) * 2
+                # if n >= 100:
+                #     n = 100
+                #
+                # self.distanceSegmentsOld[self.actualSector] = self.distanceSegments[self.actualSector]
+                # self.distanceSegments[self.actualSector] = n
+
                 self.distanceSegments[self.actualSector] = math.fsum(self.tempDistance) / len(self.tempDistance)
                 self.tempDistance = []
                 self.actualSector = sector
@@ -77,6 +94,7 @@ class Sonar:
     def get_view_angle(self):
         return self.view_angle
 
+
     def get_nav_array(self):
         # print('distances', self.distanceSegments)
         segment = math.floor(self.segments / 3)
@@ -88,3 +106,25 @@ class Sonar:
         ]
         # print('nav_array = ', nav_array)
         return nav_array
+
+# def mean(data):
+#     """Return the sample arithmetic mean of data."""
+#     n = len(data)
+#     return math.fsum(data) / n
+#
+#
+# def _ss(data):
+#     """Return sum of square deviations of sequence data."""
+#     c = mean(data)
+#     ss = sum((x - c) ** 2 for x in data)
+#     return ss
+#
+#
+# def stddev(data, ddof=0):
+#     """Calculates the population standard deviation
+#     by default; specify ddof=1 to compute the sample
+#     standard deviation."""
+#     n = len(data)
+#     ss = _ss(data)
+#     pvar = ss / (n - ddof)
+#     return pvar ** 0.5
