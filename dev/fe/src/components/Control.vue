@@ -1,13 +1,13 @@
 <template>
     <div class="control text-center">
         <div class="row mx-0">
-             <div class="col-4 px-0 bg-success" v-touch:start="startAuto" @mousedown="startAuto" @mouseup="stopAuto">
+             <div class="col-4 px-0 bg-success" v-touch:start="startAuto" @mousedown="startAuto">
                 <span>👨‍✈️</span>
             </div>
             <div class="col-4 px-0 border-left border-right" v-touch:start="moveForward" @mousedown="moveForward" v-touch:end="stopAuto" @mouseup="stopAuto">
                 <span>👆</span>
             </div>
-            <div class="col-4 px-0 bg-danger" v-touch:start="stopAuto" @mousedown="stopAuto" @mouseup="stopAuto">
+            <div class="col-4 px-0 bg-danger" v-touch:start="stopAuto" @mousedown="stopAuto">
                 <span>👷‍♀️</span>
             </div>
         </div>
